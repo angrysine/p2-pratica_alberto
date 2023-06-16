@@ -3,10 +3,7 @@ import cv2
 # Abre o arquivo de video
 video_capture = cv2.VideoCapture('../assets/arsene.mp4')
 
-# Checa se foi possivel abrir o arquivo
-if not video_capture.isOpened():
-    print("Error opening video file")
-    exit(1)
+
 
 # Loop de leitura frame por frame
 while True:
@@ -15,8 +12,8 @@ while True:
     ret, frame = video_capture.read()
 
     # Se nao conseguiu ler o frame, para o laco
-    if not ret:
-        break
+    # if not ret:
+    #     break
 
     # Exibe o frame
     cv2.imshow('Video Playback', frame)

@@ -1,4 +1,5 @@
 import cv2
+from ultralytics import  YOLO
 
 # Abre o arquivo de video
 input_video = cv2.VideoCapture('../assets/arsene.mp4')
@@ -18,7 +19,7 @@ height = int(input_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
 # Codec utilizado
 # FPS do video e
 # Tamanho do video
-output_video = cv2.VideoWriter( './saida/out.avi',cv2.VideoWriter_fourcc(*'DIVX'), 24, (width, height))
+output_video = cv2.VideoWriter( './saida/out.mp4',cv2.VideoWriter_fourcc(*'MPV4'), 24, (width, height))
 
 # Loop de leitura frame por frame
 while True:
@@ -30,19 +31,14 @@ while True:
     if not ret:
         break
     
-    # Vamos editar o frame com um retangulo
-    cv2.rectangle(
-            img=frame,
-            pt1=(100, 100),
-            pt2=(300, 300),
-            color=(0,0,255),
-            thickness=5
-        )
 
+        
     # Exibe o frame
     cv2.imshow('Video Playback', frame)
-    
+    model = YOLO('../yolov8n-face.pt')  # carrega modelo
     # Escreve o frame no output
+    results =  model(frame)
+    frame = results[0].plot()
     output_video.write(frame)
 
     # Se o usuario apertar q, encerra o playback
@@ -50,6 +46,7 @@ while True:
     if cv2.waitKey(30) & 0xFF == ord('q'):
         break
     
+
 # Fecha tudo
 output_video.release()
 input_video.release()
